@@ -1,0 +1,40 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+class CreateRefPeristiwaTable extends Migration {
+
+	/**
+	 * Run the migrations.
+	 *
+	 * @return void
+	 */
+	public function up()
+	{
+		Schema::create('refPeristiwa', function(Blueprint $table)
+		{
+			$table->guid('peristiwa_id')->primary('PK__peristiw__3213E83F4F731431');
+			$table->string('peristiwa', 45)->nullable();
+			$table->string('kod', 45)->nullable();
+			$table->smallInteger('papar')->nullable();
+			$table->dateTime('hapus_pada')->nullable();
+			$table->dateTime('daftar_pada')->nullable();
+			$table->guid('daftar_oleh')->nullable();
+			$table->dateTime('kemaskini_pada')->nullable();
+			$table->guid('kemaskini_oleh')->nullable();
+		});
+	}
+
+
+	/**
+	 * Reverse the migrations.
+	 *
+	 * @return void
+	 */
+	public function down()
+	{
+		Schema::drop('refPeristiwa');
+	}
+
+}
