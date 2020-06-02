@@ -1,9 +1,11 @@
 <?php
+
 namespace App\Utils;
 
 class Generator
 {
-    public static function build() {
+    public static function build()
+    {
         $use = 'use OwenIt\Auditing\Contracts\Auditable;';
         $secondParam = 'use \OwenIt\Auditing\Auditable;';
         $thirdParam = "
@@ -20,7 +22,7 @@ class Generator
     *
     * @var string
     */
-    const UPDATED_AT = 'kemaskini_pada';\n";
+    const UPDATED_AT = 'kemaskini_pada';";
 
         $path = app_path();
         $file = [];
@@ -47,41 +49,27 @@ class Generator
                     $lineContent = $replaced;
                     $replaced .= $newClass . PHP_EOL;
                     $lineContent .= "\n" . "\t" . $secondParam . PHP_EOL;
-                    $lineContent .= $thirdParam . PHP_EOL;
-                    $lineContent .= $fourParam . PHP_EOL;
                     // dd($lineContent);
                 }
 
-                if (in_array($lineNumber, $delLineNumber)) {
-                    unset($content[$lineNumber]);
+                if (strpos($lineContent, '$incrementing')) {
+                    $lineContent .= $thirdParam . PHP_EOL;
+                    $lineContent .= $fourParam . PHP_EOL;
                 }
-            }
-            $allContent = implode("", $content);
-            file_put_contents($value, $allContent);
-        }
-        dump('success 50%');
 
-        foreach ($file as $key => $value) {
-            $trim = str_replace("/Users/pocketdata/Desktop/docker-webstack/projects/reverse/app/", "", $value);
-            $withoutExt = preg_replace('/\\.[^.\\s]{3,4}$/', '', $trim);
-            $content = file($value);
-
-            // dd($content);
-            $delLineNumber = [];
-            foreach ($content as $lineNumber => &$lineContent) {
-                if(strpos($lineContent, '$primaryKey')) {
+                if (strpos($lineContent, '$primaryKey')) {
                     $start = strpos($lineContent, '\'') + 1;
-                    $length = strlen($lineContent)  - $start - 3 ; 
-                    
+                    $length = strlen($lineContent)  - $start - 3;
+
                     // strpos($lineContent, '\';') - 3 ;
                     $e = substr($lineContent, $start, $length);
-                
-                    $primaryKey = (!empty($e) ?? 'id');
+
+                    $primaryKey = $e;
                     $a = '$model';
                     $b = '->daftar_oleh';
                     $c = '->kemaskini_oleh';
-                    $d = '->'.$primaryKey;
-                $functionParam = "
+                    $d = '->' . $primaryKey;
+                    $functionParam = "
     /**
     * auto generate UUID
     */
@@ -90,15 +78,15 @@ class Generator
         parent::boot();
         self::creating(function ($a) {
             $a$d = Str::uuid(); 
-            $a$b = Auth::user()$d;
+            $a$b = Auth::user()->id;
         });
         self::updating(function ($a) {
-            $a$c = Auth::user()$d;
+            $a$c = Auth::user()->id;
         });
     }";
-                // $test = array_search($lineContent, $content);
-                $lineContent .= $functionParam . PHP_EOL;
-            }
+                    // $test = array_search($lineContent, $content);
+                    $lineContent .= $functionParam . PHP_EOL;
+                }                
 
                 if (in_array($lineNumber, $delLineNumber)) {
                     unset($content[$lineNumber]);
@@ -106,7 +94,8 @@ class Generator
             }
             $allContent = implode("", $content);
             file_put_contents($value, $allContent);
+            dump('finished edit file - '. $trim);
         }
-        dd('success all file');
+        dd('success add to all model%');
     }
 }

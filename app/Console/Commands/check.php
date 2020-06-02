@@ -42,20 +42,37 @@ class check extends Command
         foreach (glob($path . '/*.php') as $filename) {
             $file[] = $filename;
         }
-        foreach ($file as $key => $value) {
-            $trim = str_replace("/Users/pocketdata/Desktop/docker-webstack/projects/reverse/app/", "", $value);
-            $withoutExt = preg_replace('/\\.[^.\\s]{3,4}$/', '', $trim);
-            $content = file($value);
 
-            // dd($content);
-            $delLineNumber = [];
-            foreach ($content as $lineNumber => &$lineContent) {
-                if (strpos($lineContent, '$primaryKey')) {
-                    dump('model'. " - " .$trim. " - " . " ada ");
-                } else {
-                    dump('model'. " - " .$trim. " - " . " tiada ");
+        $e = '$primaryKey';
+        $functionParam = "
+    /**
+    * The primary key for the model.
+    * 
+    * @var string
+    */
+    protected $e = 'id';";
+
+        foreach ($file as $key => $value) {
+            $content = file($value);
+            $contents = file_get_contents($value);
+            $pattern = preg_quote($e, '/');
+            $pattern = "/^.*$pattern.*\$/m";
+
+            if (preg_match_all($pattern, $contents, $matches)) {
+                echo "Found matches:\n";
+                echo implode("\n", $matches[0]);
+                echo "\n";
+            } else {
+                foreach ($content as $lineNumber => &$lineContent) {
+                    if (strpos($lineContent, '$table')) {
+                        $lineContent .= $functionParam . PHP_EOL;
+                        dump('success add to - '. $value);
+                    }
                 }
             }
+            $allContent = implode("", $content);
+            file_put_contents($value, $allContent);
         }
+        dd("\n success check all file");
     }
 }
