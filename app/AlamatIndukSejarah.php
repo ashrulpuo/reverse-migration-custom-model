@@ -86,7 +86,7 @@ class AlamatIndukSejarah extends Model implements Auditable
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function penggunaDaftar()
+    public function daftarOleh()
     {
         return $this->belongsTo('App\Pengguna', 'daftar_oleh', 'pengguna_id');
     }
@@ -94,7 +94,7 @@ class AlamatIndukSejarah extends Model implements Auditable
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function penggunaKemaskini()
+    public function kemaskiniOleh()
     {
         return $this->belongsTo('App\Pengguna', 'kemaskini_oleh', 'pengguna_id');
     }

@@ -87,12 +87,24 @@ class Generator
                     // $test = array_search($lineContent, $content);
                     $lineContent .= $functionParam . PHP_EOL;
                 }                
+                if(strpos($lineContent, "belongsTo('App\Pengguna', 'kemaskini_oleh', 'pengguna_id');")){
+                    $methodLine = $lineNumber - 2;
+                    $name = "    public function kemaskiniOleh()";
+                    $content[$methodLine] = $name.PHP_EOL;
+                }
+
+                if(strpos($lineContent, "belongsTo('App\Pengguna', 'daftar_oleh', 'pengguna_id');")){
+                    $methodLine = $lineNumber - 2;
+                    $name = "    public function daftarOleh()";
+                    $content[$methodLine] = $name.PHP_EOL;
+                }
 
                 if (in_array($lineNumber, $delLineNumber)) {
                     unset($content[$lineNumber]);
                 }
             }
             $allContent = implode("", $content);
+            // dd($allContent);
             file_put_contents($value, $allContent);
             dump('finished edit file - '. $trim);
         }

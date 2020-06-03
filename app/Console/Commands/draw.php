@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Utils\Generator;
 
-class draw extends Command
+class Draw extends Command
 {
     /**
      * The name and signature of the console command.
